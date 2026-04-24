@@ -23,7 +23,7 @@ git clone https://github.com/realtimzkie/BudgetEase.git
 ## 📊 Diagrams
 
 ### Class Diagram
-![Class Diagram](./images/class_diagram.png)
+![Class Diagram](./images/Class_Diagram.png)
 
 ### Use Case Diagram
-![Use Case Diagram](./images/use_case_diagram.png)
+![Use Case Diagram](./images/Use_Case_Diagram.png)

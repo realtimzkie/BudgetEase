@@ -19,11 +19,11 @@ BudgetEase helps individuals and households take control of their finances by si
 ---
 
 ## 📸 Screenshots
-### Dashboard
-![Dashboard](./images/dashboard.png)
+### Class Diagram
+![Class Diagram](./images/class-diagram.png)
 
-### Expense Tracking
-![Expense Tracking](./images/expense-tracking.png)
+### Use Case Diagram
+![Use Case Diagram](./images/use-case-diagram.png)
 
 ---
 
@@ -52,22 +52,6 @@ Record expenses and categorize them.
 Set monthly budget limits.
 
 View summaries and track progress toward goals.
-
-📊 Diagrams
-Class Diagram
-[Looks like the result wasn't safe to show. Let's switch things up and try something else!]
-
-Use Case Diagram
-[Looks like the result wasn't safe to show. Let's switch things up and try something else!]
-
-⚙️ Tech Stack
-Frontend: React Native
-
-Backend: Node.js + Express
-
-Database: MySQL
-
-Version Control: Git
 
 🤝 Contributing
 Contributions are welcome!

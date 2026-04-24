@@ -19,3 +19,11 @@ BudgetEase is a simple and intuitive budget management app designed to help user
 1. Clone the repository:
 ```bash
 git clone https://github.com/realtimzkie/BudgetEase.git
+
+## 📊 Diagrams
+
+### Class Diagram
+![Class Diagram](./images/class_diagram.png)
+
+### Use Case Diagram
+![Use Case Diagram](./images/use_case_diagram.png)

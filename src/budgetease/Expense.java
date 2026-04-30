@@ -8,5 +8,7 @@ public class Expense extends Transaction {
     @Override
     public String getType() { return "EXPENSE"; }
     @Override
-    public double getBalanceImpact() { return -getAmount(); }
+    public double getBalanceImpact() { 
+        return -getAmount(); 
+    }
 }

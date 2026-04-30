@@ -8,5 +8,7 @@ public class Income extends Transaction {
     @Override
     public String getType() { return "INCOME"; }
     @Override
-    public double getBalanceImpact() { return getAmount(); }
+    public double getBalanceImpact() { 
+        return getAmount(); 
+    }
 }

@@ -3,7 +3,7 @@ package budgetease;
 import java.util.*;
 
 public class BudgetEaseApp {
-    private final BudgetManager manager;
+    private BudgetManager manager;
     private final Scanner scanner = new Scanner(System.in);
     private final TransactionValidator[] validators = {
         new BasicValidator(), new StrictValidator()
@@ -102,7 +102,7 @@ public class BudgetEaseApp {
             case 2 -> currentValidator = 1;
             case 3 -> currentReportGen = 0;
             case 4 -> currentReportGen = 1;
-            default -> return;
+            default ->  { return ; }
         }
         
         manager = new BudgetManager(validators[currentValidator], reportGens[currentReportGen]);

@@ -3,9 +3,11 @@ package budgetease;
 public class StrictValidator implements TransactionValidator {
     @Override
     public boolean isValid(Transaction transaction) {
-        return new BasicValidator().isValid(transaction) &&
-               transaction.getDescription().length() >= 5 &&
-               transaction.getAmount() >= 10.0;
+        return transaction.getAmount() >= 10.0 &&
+               transaction.getAmount() <= 1000000 &&
+               transaction.getDescription() != null && 
+               !transaction.getDescription().trim().isEmpty() &&
+               transaction.getDescription().length() >= 5;
     }
 
     @Override

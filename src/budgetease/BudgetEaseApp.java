@@ -7,7 +7,7 @@ public class BudgetEaseApp {
     private final Scanner scanner = new Scanner(System.in);
 
     public BudgetEaseApp() {
-        ProfessionalValidator validator = new ProfessionalValidator();
+        StrictValidator validator = new StrictValidator();
         DetailedReportGenerator reportGen = new DetailedReportGenerator();
         this.manager = new BudgetManager(validator, reportGen);
     }
@@ -37,8 +37,8 @@ public class BudgetEaseApp {
                 ┌─────────────────────────────────────┐
                 │           BudgetEase Menu           │
                 ├─────────────────────────────────────┤
-                │ 1. ➕ Add Expense (w/ Category)      │
-                │ 2. 💵 Add Income (Quick)             │
+                │ 1. ➕ Add Expense                    │
+                │ 2. 💵 Add Income                     │
                 │ 3. 💰 View Balance                   │
                 │ 4. 📊 Generate Report                │
                 │ 5. 🔍 Transactions by Category       │
@@ -69,7 +69,7 @@ public class BudgetEaseApp {
     private void addExpense() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
-        Category cat = selectExpenseCategory();  // ✅ CATEGORY for EXPENSE
+        Category cat = selectExpenseCategory();  
         manager.addExpense(desc, amount, cat);
         System.out.println("✅ Expense added (Category: " + cat.getDisplayName() + ")");
     }
@@ -77,8 +77,8 @@ public class BudgetEaseApp {
     private void addIncome() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
-        manager.addIncome(desc, amount, Category.OTHER);  // ✅ NO CATEGORY PROMPT
-        System.out.println("✅ Income added (Quick - OTHER category)");
+        manager.addIncome(desc, amount, Category.INCOME);
+        System.out.printf("✅ Income added: $%.2f (INCOME category)%n", amount);
     }
 
     private Category selectExpenseCategory() {

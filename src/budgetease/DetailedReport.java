@@ -62,8 +62,8 @@ public class DetailedReport {
                 ╔══════════════════════════════════════════════════════╗
                 ║                    BudgetEase Report                 ║
                 ╠══════════════════════════════════════════════════════╣
-                ║  INCOME:     $%9.2f        EXPENSES:  $%9.2f         ║
-                ║  BALANCE:    $%9.2f        TRANSACTIONS: %3d         ║
+                ║  INCOME:    $%9.2f       EXPENSES: $%9.2f         ║
+                ║  BALANCE:   $%9.2f       TRANSACTIONS: %3d        ║
                 ╠══════════════════════════════════════════════════════╣
                 ║                       CATEGORIES                     ║
                 ║  %s                           ║                      ║

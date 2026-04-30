@@ -7,7 +7,7 @@ public class BudgetEaseApp {
     private final Scanner scanner = new Scanner(System.in);
 
     public BudgetEaseApp() {
-        StrictValidator validator = new StrictValidator();
+        ProfessionalValidator validator = new ProfessionalValidator();
         DetailedReportGenerator reportGen = new DetailedReportGenerator();
         this.manager = new BudgetManager(validator, reportGen);
     }
@@ -37,12 +37,13 @@ public class BudgetEaseApp {
                 ┌─────────────────────────────────────┐
                 │           BudgetEase Menu           │
                 ├─────────────────────────────────────┤
-                │ 1. ➕ Add Expense                    │
-                │ 2. 💵 Add Income                     │
+                │ 1. ➕ Add Expense (w/ Category)      │
+                │ 2. 💵 Add Income (Quick)             │
                 │ 3. 💰 View Balance                   │
                 │ 4. 📊 Generate Report                │
-                │ 5. 🔍 All Transactions               │
-                │ 6. ❌ Exit                           │
+                │ 5. 🔍 Transactions by Category       │
+                │ 6. 📋 All Transactions               │
+                │ 7. ❌ Exit                           │
                 └─────────────────────────────────────┘
                 %s
                 """, capacityInfo));
@@ -54,8 +55,9 @@ public class BudgetEaseApp {
             case 2 -> addIncome();
             case 3 -> System.out.println("💰 Balance: $" + String.format("%.2f", manager.getBalance()));
             case 4 -> System.out.println("\n" + manager.generateReport());
-            case 5 -> showAllTransactions();
-            case 6 -> {
+            case 5 -> showTransactionsByCategory();
+            case 6 -> showAllTransactions();
+            case 7 -> {
                 System.out.println("👋 Thank you for using BudgetEase!");
                 System.exit(0);
             }
@@ -67,15 +69,44 @@ public class BudgetEaseApp {
     private void addExpense() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
-        manager.addExpense(desc, amount, Category.OTHER);  
-        System.out.println("✅ Expense added (Category: OTHER)");
+        Category cat = selectExpenseCategory();  // ✅ CATEGORY for EXPENSE
+        manager.addExpense(desc, amount, cat);
+        System.out.println("✅ Expense added (Category: " + cat.getDisplayName() + ")");
     }
 
     private void addIncome() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
-        manager.addIncome(desc, amount, Category.OTHER);   
-        System.out.println("✅ Income added (Category: OTHER)");
+        manager.addIncome(desc, amount, Category.OTHER);  // ✅ NO CATEGORY PROMPT
+        System.out.println("✅ Income added (Quick - OTHER category)");
+    }
+
+    private Category selectExpenseCategory() {
+        System.out.println("Expense Category:");
+        Category[] expenses = {Category.FOOD, Category.TRANSPORT, Category.ENTERTAINMENT,
+                              Category.UTILITIES, Category.SHOPPING, Category.OTHER};
+        for (int i = 0; i < expenses.length; i++) {
+            System.out.println((i + 1) + ". " + expenses[i].getDisplayName());
+        }
+        return expenses[getInt("Select (1-6): ") - 1];
+    }
+
+    private void showTransactionsByCategory() {
+        Category cat = selectExpenseCategory();  // Only expense categories
+        Transaction[] transactions = manager.getTransactionsByCategory(cat);
+        
+        if (transactions.length == 0) {
+            System.out.println("📭 No " + cat.getDisplayName() + " transactions");
+            return;
+        }
+        
+        System.out.println("\n📋 " + cat.getDisplayName() + " Transactions (" + transactions.length + "):");
+        System.out.println("ID     | Type     | Description           | Amount  | Date");
+        System.out.println("-------|----------|----------------------|---------|----------");
+        for (Transaction t : transactions) {
+            System.out.printf("%-6s | %-8s | %-20s | $%7.2f | %s%n",
+                t.getId(), t.getType(), t.getDescription(), t.getAmount(), t.getDate());
+        }
     }
 
     private void showAllTransactions() {

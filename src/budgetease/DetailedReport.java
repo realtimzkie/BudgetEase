@@ -60,16 +60,16 @@ public class DetailedReport {
     public String toString() {
         return String.format("""
                 ╔══════════════════════════════════════════════════════╗
-                ║                    BudgetEase Report                  ║
+                ║                    BudgetEase Report                 ║
                 ╠══════════════════════════════════════════════════════╣
-                ║  INCOME:     $%9.2f        EXPENSES:  $%9.2f       ║
-                ║  BALANCE:    $%9.2f        TRANSACTIONS: %3d        ║
+                ║  INCOME:     $%9.2f        EXPENSES:  $%9.2f         ║
+                ║  BALANCE:    $%9.2f        TRANSACTIONS: %3d         ║
                 ╠══════════════════════════════════════════════════════╣
-                ║                       CATEGORIES                      ║
-                %s
+                ║                       CATEGORIES                     ║
+                ║  %s                           ║                      ║
                 ╠══════════════════════════════════════════════════════╣
-                ║                      ANALYTICS                        ║
-                ║  Average Transaction: $%9.2f   Categories Used: %2d ║
+                ║                      ANALYTICS                       ║
+                ║  Average Transaction: $%9.2f   Categories Used: %2d  ║
                 ╚══════════════════════════════════════════════════════╝
                 """, totalIncome, totalExpense, balance, transactionCount, 
                 getCategoryBreakdown(), averageTransaction, countUsedCategories());

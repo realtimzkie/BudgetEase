@@ -30,7 +30,6 @@ public class DetailedReportGenerator implements ReportGenerator {
         return new DetailedReport(totalIncome, totalExpense, manager.getBalance(), 
                                  categoryTotals, transCopy, transCount, avgAmount);
     }
-
     @Override
     public String getReportType() { 
         return "Detailed Report"; 

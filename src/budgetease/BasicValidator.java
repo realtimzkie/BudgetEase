@@ -1,4 +1,4 @@
-package com.budgetease.validators;
+package budgetease;
 
 public class BasicValidator implements TransactionValidator {
     @Override

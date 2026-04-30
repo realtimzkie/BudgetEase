@@ -1,3 +1,4 @@
+package budgetease;
 import java.time.LocalDate;
 
 public class BudgetManager {

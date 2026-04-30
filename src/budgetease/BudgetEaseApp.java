@@ -1,3 +1,5 @@
+package budgetease;
+
 import java.util.*;
 
 public class BudgetEaseApp {

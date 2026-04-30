@@ -1,0 +1,27 @@
+# Compiled Java class files
+*.class
+
+# Log files
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Virtual Machine temp files
+hs_err_pid*
+
+# VS Code specific files
+.vscode/
+bin/
+
+# OS generated files
+.DS_Store
+Thumbs.db

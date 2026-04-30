@@ -11,11 +11,9 @@ public class BudgetEaseApp {
         DetailedReportGenerator reportGen = new DetailedReportGenerator();
         this.manager = new BudgetManager(validator, reportGen);
     }
-
     public static void main(String[] args) {
         new BudgetEaseApp().run();
     }
-
     private void run() {
         while (true) {
             displayMenu();

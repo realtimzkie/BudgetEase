@@ -1,4 +1,5 @@
 package budgetease;
+
 import java.time.LocalDate;
 
 public class BudgetManager {
@@ -17,6 +18,7 @@ public class BudgetManager {
         this.validator = validator;
         this.reportGenerator = reportGenerator;
     }
+
 
     public void addExpense(String description, double amount, Category category) {
         checkCapacity();

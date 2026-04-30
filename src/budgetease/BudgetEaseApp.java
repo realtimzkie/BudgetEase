@@ -3,35 +3,13 @@ package budgetease;
 import java.util.*;
 
 public class BudgetEaseApp {
-    private BudgetManager manager;
+    private final BudgetManager manager;
     private final Scanner scanner = new Scanner(System.in);
-    private final TransactionValidator[] validators = {
-        new BasicValidator(), new StrictValidator()
-    };
-    private final ReportGenerator[] reportGens = {
-        new BasicReportGenerator(), new DetailedReportGenerator()
-    };
-    private int currentValidator = 1; // Strict by default
-    private int currentReportGen = 1; // Detailed by default
 
     public BudgetEaseApp() {
-        this.manager = new BudgetManager(validators[currentValidator], reportGens[currentReportGen]);
-        displayWelcome();
-    }
-
-    private void displayWelcome() {
-        System.out.println("""
-                ╔══════════════════════════════════════════════════════╗
-                ║           💰 BudgetEase - Professional Edition       ║
-                ╠══════════════════════════════════════════════════════╣
-                ║  Validator: %s                                ║
-                ║  Report:    %s                                ║
-                ║  Capacity:  100 transactions                        ║
-                ╚══════════════════════════════════════════════════════╝
-                """.formatted(
-                    validators[currentValidator].getValidationRule(),
-                    reportGens[currentReportGen].getReportType()
-                ));
+        StrictValidator validator = new StrictValidator();
+        DetailedReportGenerator reportGen = new DetailedReportGenerator();
+        this.manager = new BudgetManager(validator, reportGen);
     }
 
     public static void main(String[] args) {
@@ -64,8 +42,7 @@ public class BudgetEaseApp {
                 │ 3. 💰 View Balance                   │
                 │ 4. 📊 Generate Report                │
                 │ 5. 🔍 Transactions by Category       │
-                │ 6. ⚙️  Settings (Validator/Report)   │
-                │ 7. ❌ Exit                           │
+                │ 6. ❌ Exit                           │
                 └─────────────────────────────────────┘
                 %s
                 """, capacityInfo));
@@ -78,8 +55,7 @@ public class BudgetEaseApp {
             case 3 -> System.out.println("💰 Balance: $" + String.format("%.2f", manager.getBalance()));
             case 4 -> System.out.println("\n" + manager.generateReport());
             case 5 -> showTransactionsByCategory();
-            case 6 -> showSettings();
-            case 7 -> {
+            case 6 -> {
                 System.out.println("👋 Thank you for using BudgetEase!");
                 System.exit(0);
             }
@@ -88,28 +64,6 @@ public class BudgetEaseApp {
         System.out.println();
     }
 
-    private void showSettings() {
-        System.out.println("🔧 Settings:");
-        System.out.println("1. Validator - Basic");
-        System.out.println("2. Validator - Strict");
-        System.out.println("3. Report - Basic");
-        System.out.println("4. Report - Detailed");
-        System.out.println("5. Back");
-        
-        int choice = getInt("Choice: ");
-        switch (choice) {
-            case 1 -> currentValidator = 0;
-            case 2 -> currentValidator = 1;
-            case 3 -> currentReportGen = 0;
-            case 4 -> currentReportGen = 1;
-            default ->  { return ; }
-        }
-        
-        manager = new BudgetManager(validators[currentValidator], reportGens[currentReportGen]);
-        System.out.println("✅ Settings updated!");
-    }
-
-    // ... rest of methods unchanged (addExpense, addIncome, etc.)
     private void addExpense() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");

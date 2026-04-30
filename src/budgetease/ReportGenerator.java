@@ -1,6 +1,6 @@
 package budgetease;
 
 interface ReportGenerator {
-    Report generateReport(BudgetManager manager);
+    DetailedReport generateReport(BudgetManager manager);
     String getReportType();
 }

@@ -42,7 +42,7 @@ public class BudgetManager {
         balance += income.getBalanceImpact();
     }
 
-    public Report generateReport() {
+    public DetailedReport generateReport() {
         return reportGenerator.generateReport(this);
     }
 

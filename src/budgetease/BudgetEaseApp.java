@@ -11,9 +11,11 @@ public class BudgetEaseApp {
         DetailedReportGenerator reportGen = new DetailedReportGenerator();
         this.manager = new BudgetManager(validator, reportGen);
     }
+
     public static void main(String[] args) {
         new BudgetEaseApp().run();
     }
+
     private void run() {
         while (true) {
             displayMenu();
@@ -39,7 +41,7 @@ public class BudgetEaseApp {
                 │ 2. 💵 Add Income                     │
                 │ 3. 💰 View Balance                   │
                 │ 4. 📊 Generate Report                │
-                │ 5. 🔍 Transactions by Category       │
+                │ 5. 🔍 All Transactions               │
                 │ 6. ❌ Exit                           │
                 └─────────────────────────────────────┘
                 %s
@@ -52,7 +54,7 @@ public class BudgetEaseApp {
             case 2 -> addIncome();
             case 3 -> System.out.println("💰 Balance: $" + String.format("%.2f", manager.getBalance()));
             case 4 -> System.out.println("\n" + manager.generateReport());
-            case 5 -> showTransactionsByCategory();
+            case 5 -> showAllTransactions();
             case 6 -> {
                 System.out.println("👋 Thank you for using BudgetEase!");
                 System.exit(0);
@@ -65,44 +67,32 @@ public class BudgetEaseApp {
     private void addExpense() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
-        Category cat = selectCategory("Expense Category");
-        manager.addExpense(desc, amount, cat);
-        System.out.println("✅ Expense added successfully");
+        manager.addExpense(desc, amount, Category.OTHER);  
+        System.out.println("✅ Expense added (Category: OTHER)");
     }
 
     private void addIncome() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
-        Category cat = selectCategory("Income Category");
-        manager.addIncome(desc, amount, cat);
-        System.out.println("✅ Income added successfully");
+        manager.addIncome(desc, amount, Category.OTHER);   
+        System.out.println("✅ Income added (Category: OTHER)");
     }
 
-    private void showTransactionsByCategory() {
-        Category cat = selectCategory("View Category");
-        Transaction[] transactions = manager.getTransactionsByCategory(cat);
+    private void showAllTransactions() {
+        Transaction[] transactions = manager.getAllTransactions();
         
         if (transactions.length == 0) {
-            System.out.println("📭 No transactions for " + cat.getDisplayName());
+            System.out.println("📭 No transactions yet");
             return;
         }
         
-        System.out.println("\n📋 " + cat.getDisplayName() + " Transactions (" + transactions.length + "):");
+        System.out.println("\n📋 All Transactions (" + transactions.length + "):");
         System.out.println("ID     | Type     | Description           | Amount  | Date");
         System.out.println("-------|----------|----------------------|---------|----------");
         for (Transaction t : transactions) {
             System.out.printf("%-6s | %-8s | %-20s | $%7.2f | %s%n",
                 t.getId(), t.getType(), t.getDescription(), t.getAmount(), t.getDate());
         }
-    }
-
-    private Category selectCategory(String title) {
-        System.out.println(title);
-        Category[] cats = Category.values();
-        for (int i = 0; i < cats.length; i++) {
-            System.out.println((i + 1) + ". " + cats[i].getDisplayName());
-        }
-        return cats[getInt("Select (1-" + cats.length + "): ") - 1];
     }
 
     private String getString(String prompt) {

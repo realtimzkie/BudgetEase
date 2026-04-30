@@ -4,10 +4,11 @@ public class BasicReportGenerator implements ReportGenerator {
     @Override
     public Report generateReport(BudgetManager manager) {
         double[] categoryTotals = new double[Category.values().length];
-        double totalIncome = 0, totalExpense = 0;
+        double totalIncome = 0;
+        double totalExpense = 0;
 
         for (int i = 0; i < manager.getTransactionCount(); i++) {
-            var t = manager.getAllTransactions()[i];
+            Transaction t = manager.getAllTransactions()[i];
             int catIndex = t.getCategory().ordinal();
             double amt = Math.abs(t.getAmount());
             
@@ -20,11 +21,11 @@ public class BasicReportGenerator implements ReportGenerator {
             }
         }
 
-        var transCopy = manager.getAllTransactions();
+        Transaction[] transCopy = manager.getAllTransactions();
         return new Report(totalIncome, totalExpense, manager.getBalance(), 
                          categoryTotals, transCopy, manager.getTransactionCount());
-    }
+    }   
 
     @Override
-    public String getReportType() { return "Basic Report"; }
+    public String getReportType() { return "BASIC"; }
 }

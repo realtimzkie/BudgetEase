@@ -5,16 +5,33 @@ import java.util.*;
 public class BudgetEaseApp {
     private final BudgetManager manager;
     private final Scanner scanner = new Scanner(System.in);
+    private final TransactionValidator[] validators = {
+        new BasicValidator(), new StrictValidator()
+    };
+    private final ReportGenerator[] reportGens = {
+        new BasicReportGenerator(), new DetailedReportGenerator()
+    };
+    private int currentValidator = 1; // Strict by default
+    private int currentReportGen = 1; // Detailed by default
 
     public BudgetEaseApp() {
-        TransactionValidator validator = new StrictValidator();
-        ReportGenerator reportGen = new DetailedReportGenerator();
-        this.manager = new BudgetManager(validator, reportGen);
-        
-        System.out.println("💰 Welcome to BudgetEase - Finance Manager");
-        System.out.println("Validator: " + validator.getValidationRule());
-        System.out.println("Max Transactions: 100");
-        System.out.println();
+        this.manager = new BudgetManager(validators[currentValidator], reportGens[currentReportGen]);
+        displayWelcome();
+    }
+
+    private void displayWelcome() {
+        System.out.println("""
+                ╔══════════════════════════════════════════════════════╗
+                ║           💰 BudgetEase - Professional Edition       ║
+                ╠══════════════════════════════════════════════════════╣
+                ║  Validator: %s                                ║
+                ║  Report:    %s                                ║
+                ║  Capacity:  100 transactions                        ║
+                ╚══════════════════════════════════════════════════════╝
+                """.formatted(
+                    validators[currentValidator].getValidationRule(),
+                    reportGens[currentReportGen].getReportType()
+                ));
     }
 
     public static void main(String[] args) {
@@ -29,12 +46,16 @@ public class BudgetEaseApp {
                 handleChoice(choice);
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
+                System.out.println();
             }
         }
     }
 
     private void displayMenu() {
-        System.out.println("""
+        String capacityInfo = manager.getTransactionCount() == 100 ? 
+            "⚠️  MAX CAPACITY (100/100)" : "";
+        
+        System.out.println(String.format("""
                 ┌─────────────────────────────────────┐
                 │           BudgetEase Menu           │
                 ├─────────────────────────────────────┤
@@ -43,9 +64,11 @@ public class BudgetEaseApp {
                 │ 3. 💰 View Balance                   │
                 │ 4. 📊 Generate Report                │
                 │ 5. 🔍 Transactions by Category       │
-                │ 6. ❌ Exit                           │
+                │ 6. ⚙️  Settings (Validator/Report)   │
+                │ 7. ❌ Exit                           │
                 └─────────────────────────────────────┘
-                Transactions: %d/100""".formatted(manager.getTransactionCount()));
+                %s
+                """, capacityInfo));
     }
 
     private void handleChoice(int choice) {
@@ -55,20 +78,44 @@ public class BudgetEaseApp {
             case 3 -> System.out.println("💰 Balance: $" + String.format("%.2f", manager.getBalance()));
             case 4 -> System.out.println("\n" + manager.generateReport());
             case 5 -> showTransactionsByCategory();
-            case 6 -> {
+            case 6 -> showSettings();
+            case 7 -> {
                 System.out.println("👋 Thank you for using BudgetEase!");
                 System.exit(0);
             }
             default -> System.out.println("❌ Invalid option");
         }
+        System.out.println();
     }
 
+    private void showSettings() {
+        System.out.println("🔧 Settings:");
+        System.out.println("1. Validator - Basic");
+        System.out.println("2. Validator - Strict");
+        System.out.println("3. Report - Basic");
+        System.out.println("4. Report - Detailed");
+        System.out.println("5. Back");
+        
+        int choice = getInt("Choice: ");
+        switch (choice) {
+            case 1 -> currentValidator = 0;
+            case 2 -> currentValidator = 1;
+            case 3 -> currentReportGen = 0;
+            case 4 -> currentReportGen = 1;
+            default -> return;
+        }
+        
+        manager = new BudgetManager(validators[currentValidator], reportGens[currentReportGen]);
+        System.out.println("✅ Settings updated!");
+    }
+
+    // ... rest of methods unchanged (addExpense, addIncome, etc.)
     private void addExpense() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
         Category cat = selectCategory("Expense Category");
         manager.addExpense(desc, amount, cat);
-        System.out.println("✅ Expense added");
+        System.out.println("✅ Expense added successfully");
     }
 
     private void addIncome() {
@@ -76,7 +123,7 @@ public class BudgetEaseApp {
         double amount = getDouble("Amount ($): ");
         Category cat = selectCategory("Income Category");
         manager.addIncome(desc, amount, cat);
-        System.out.println("✅ Income added");
+        System.out.println("✅ Income added successfully");
     }
 
     private void showTransactionsByCategory() {
@@ -88,10 +135,12 @@ public class BudgetEaseApp {
             return;
         }
         
-        System.out.println("\n📋 " + cat.getDisplayName() + " Transactions:");
+        System.out.println("\n📋 " + cat.getDisplayName() + " Transactions (" + transactions.length + "):");
+        System.out.println("ID     | Type     | Description           | Amount  | Date");
+        System.out.println("-------|----------|----------------------|---------|----------");
         for (Transaction t : transactions) {
-            System.out.printf("%s | %s | $%.2f | %s%n", 
-                t.getType(), t.getDescription(), t.getAmount(), t.getDate());
+            System.out.printf("%-6s | %-8s | %-20s | $%7.2f | %s%n",
+                t.getId(), t.getType(), t.getDescription(), t.getAmount(), t.getDate());
         }
     }
 

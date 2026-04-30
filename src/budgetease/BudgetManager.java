@@ -19,10 +19,7 @@ public class BudgetManager {
     }
 
     public void addExpense(String description, double amount, Category category) {
-        if (transactionCount >= MAX_TRANSACTIONS) {
-            throw new RuntimeException("Maximum transactions reached: " + MAX_TRANSACTIONS);
-        }
-        
+        checkCapacity();
         String id = "EXP" + idCounter++;
         String date = LocalDate.now().toString();
         Expense expense = new Expense(id, description, amount, date, category);
@@ -34,10 +31,7 @@ public class BudgetManager {
     }
 
     public void addIncome(String description, double amount, Category category) {
-        if (transactionCount >= MAX_TRANSACTIONS) {
-            throw new RuntimeException("Maximum transactions reached: " + MAX_TRANSACTIONS);
-        }
-        
+        checkCapacity();
         String id = "INC" + idCounter++;
         String date = LocalDate.now().toString();
         Income income = new Income(id, description, amount, date, category);
@@ -49,43 +43,17 @@ public class BudgetManager {
     }
 
     public Report generateReport() {
-        double[] categoryTotals = new double[Category.values().length];
-        double totalIncome = 0, totalExpense = 0;
-
-        for (int i = 0; i < transactionCount; i++) {
-            Transaction t = transactions[i];
-            int catIndex = t.getCategory().ordinal();
-            double amt = Math.abs(t.getAmount());
-            
-            categoryTotals[catIndex] += amt;
-            
-            if ("INCOME".equals(t.getType())) {
-                totalIncome += amt;
-            } else {
-                totalExpense += amt;
-            }
-        }
-
-        Transaction[] transCopy = new Transaction[transactionCount];
-        System.arraycopy(transactions, 0, transCopy, 0, transactionCount);
-        
-        return new Report(totalIncome, totalExpense, balance, categoryTotals, transCopy, transactionCount);
+        return reportGenerator.generateReport(this);
     }
 
     public double getBalance() { return balance; }
 
     public Transaction[] getTransactionsByCategory(Category category) {
-        int catIndex = category.ordinal();
         int count = 0;
-        
-        // First pass: count matching transactions
         for (int i = 0; i < transactionCount; i++) {
-            if (transactions[i].getCategory() == category) {
-                count++;
-            }
+            if (transactions[i].getCategory() == category) count++;
         }
         
-        // Second pass: copy matching transactions
         Transaction[] result = new Transaction[count];
         int resultIndex = 0;
         for (int i = 0; i < transactionCount; i++) {
@@ -96,16 +64,23 @@ public class BudgetManager {
         return result;
     }
 
-    public int getTransactionCount() { return transactionCount; }
     public Transaction[] getAllTransactions() {
         Transaction[] copy = new Transaction[transactionCount];
         System.arraycopy(transactions, 0, copy, 0, transactionCount);
         return copy;
     }
 
+    public int getTransactionCount() { return transactionCount; }
+
+    private void checkCapacity() {
+        if (transactionCount >= MAX_TRANSACTIONS) {
+            throw new RuntimeException("⚠️  MAX CAPACITY REACHED: 100 transactions");
+        }
+    }
+
     private void validateTransaction(Transaction transaction) {
         if (!validator.isValid(transaction)) {
-            throw new IllegalArgumentException("Invalid: " + validator.getValidationRule());
+            throw new IllegalArgumentException("❌ Invalid: " + validator.getValidationRule());
         }
     }
 }

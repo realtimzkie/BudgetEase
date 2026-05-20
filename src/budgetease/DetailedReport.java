@@ -1,5 +1,7 @@
 package budgetease;
 
+import java.util.Map;
+
 public class DetailedReport {
     private final double totalIncome;
     private final double totalExpense;
@@ -58,20 +60,51 @@ public class DetailedReport {
 
     @Override
     public String toString() {
-        return String.format("""
-                ╔══════════════════════════════════════════════════════╗
-                ║                    BudgetEase Report                 ║
-                ╠══════════════════════════════════════════════════════╣
-                ║  INCOME:    $%9.2f       EXPENSES: $%9.2f         ║
-                ║  BALANCE:   $%9.2f       TRANSACTIONS: %3d        ║
-                ╠══════════════════════════════════════════════════════╣
-                ║                       CATEGORIES                     ║
-                ║  %s                           ║                      ║
-                ╠══════════════════════════════════════════════════════╣
-                ║                      ANALYTICS                       ║
-                ║  Average Transaction: $%9.2f   Categories Used: %2d  ║
-                ╚══════════════════════════════════════════════════════╝
-                """, totalIncome, totalExpense, balance, transactionCount, 
-                getCategoryBreakdown(), averageTransaction, countUsedCategories());
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("╔══════════════════════════════════════════════════════╗\n");
+        sb.append("║                    BudgetEase Report                 ║\n");
+        sb.append("╠══════════════════════════════════════════════════════╣\n");
+        
+        String leftUpper = String.format("INCOME:    $%9.2f", totalIncome);
+        String rightUpper = String.format("EXPENSES: $%9.2f", totalExpense);
+        sb.append(String.format("║  %-25s   %-24s║\n", leftUpper, rightUpper));
+        
+        String leftLower = String.format("BALANCE:   $%9.2f", balance);
+        String rightLower = String.format("TRANSACTIONS: %3d", transactionCount);
+        sb.append(String.format("║  %-25s   %-24s║\n", leftLower, rightLower));
+        
+        sb.append("╠══════════════════════════════════════════════════════╣\n");
+        sb.append("║                       CATEGORIES                     ║\n");
+        
+        String breakdown = getCategoryBreakdown();
+        if (breakdown != null && !breakdown.isEmpty()) {
+            String[] lines = breakdown.split("\\r?\\n");
+            for (String line : lines) {
+                String trimmedLine = line.trim();
+                if (!trimmedLine.isEmpty()) {
+                    if (trimmedLine.contains("$")) {
+                        int dollarIdx = trimmedLine.indexOf("$");
+                        String catName = trimmedLine.substring(0, dollarIdx).trim();
+                        String amountStr = trimmedLine.substring(dollarIdx).trim();
+                        String formattedLine = String.format("%-39s %12s", catName, amountStr);
+                        sb.append(String.format("║  %-52s║\n", formattedLine));
+                    } else {
+                        sb.append(String.format("║  %-52s║\n", trimmedLine));
+                    }
+                }
+            }
+        }
+        
+        sb.append("╠══════════════════════════════════════════════════════╣\n");
+        sb.append("║                       ANALYTICS                      ║\n");
+        
+        String avgString = String.format("Average Transaction: $%9.2f", averageTransaction);
+        String catString = String.format("Categories Used: %2d", countUsedCategories());
+        sb.append(String.format("║  %-31s   %-18s║\n", avgString, catString));
+        
+        sb.append("╚══════════════════════════════════════════════════════╝\n");
+        
+        return sb.toString();
     }
 }

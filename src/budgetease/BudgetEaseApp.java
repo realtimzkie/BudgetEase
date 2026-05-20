@@ -37,13 +37,13 @@ public class BudgetEaseApp {
                 ┌─────────────────────────────────────┐
                 │           BudgetEase Menu           │
                 ├─────────────────────────────────────┤
-                │ 1. ➕ Add Expense                    │
-                │ 2. 💵 Add Income                     │
-                │ 3. 💰 View Balance                   │
-                │ 4. 📊 Generate Report                │
-                │ 5. 🔍 Transactions by Category       │
-                │ 6. 📋 All Transactions               │
-                │ 7. ❌ Exit                           │
+                │ 1.   Add Expense                    │
+                │ 2.   Add Income                     │
+                │ 3.   View Balance                   │
+                │ 4.   Generate Report                │
+                │ 5.   Transactions by Category       │
+                │ 6.   All Transactions               │
+                │ 7.   Exit                           │
                 └─────────────────────────────────────┘
                 %s
                 """, capacityInfo));
@@ -53,15 +53,15 @@ public class BudgetEaseApp {
         switch (choice) {
             case 1 -> addExpense();
             case 2 -> addIncome();
-            case 3 -> System.out.println("💰 Balance: $" + String.format("%.2f", manager.getBalance()));
+            case 3 -> System.out.println(" Balance: $" + String.format("%.2f", manager.getBalance()));
             case 4 -> System.out.println("\n" + manager.generateReport());
             case 5 -> showTransactionsByCategory();
             case 6 -> showAllTransactions();
             case 7 -> {
-                System.out.println("👋 Thank you for using BudgetEase!");
+                System.out.println(" Thank you for using BudgetEase!");
                 System.exit(0);
             }
-            default -> System.out.println("❌ Invalid option");
+            default -> System.out.println(" Invalid option");
         }
         System.out.println();
     }
@@ -71,14 +71,14 @@ public class BudgetEaseApp {
         double amount = getDouble("Amount ($): ");
         Category cat = selectExpenseCategory();  
         manager.addExpense(desc, amount, cat);
-        System.out.println("✅ Expense added (Category: " + cat.getDisplayName() + ")");
+        System.out.println(" Expense added (Category: " + cat.getDisplayName() + ")");
     }
 
     private void addIncome() {
         String desc = getString("Description: ");
         double amount = getDouble("Amount ($): ");
         manager.addIncome(desc, amount, Category.INCOME);
-        System.out.printf("✅ Income added: $%.2f (INCOME category)%n", amount);
+        System.out.printf(" Income added: $%.2f (INCOME category)%n", amount);
     }
 
     private Category selectExpenseCategory() {

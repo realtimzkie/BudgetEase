@@ -33,9 +33,5 @@ public class DetailedReportGenerator implements ReportGenerator {
     @Override
     public String getReportType() { 
         return "Detailed Report"; 
-<<<<<<< HEAD
     } 
-=======
-    }
->>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
 }

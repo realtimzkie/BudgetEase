@@ -1,16 +1,17 @@
 package budgetease;
 
+import java.awt.*;
+import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class BudgetEaseGUI {
     private final BudgetManager manager;
     private JFrame frame;
     private JLabel balanceLabel;
+    private JLabel tipLabel;
     private DefaultTableModel tableModel;
     private JTable transactionsTable;
 
@@ -34,13 +35,18 @@ public class BudgetEaseGUI {
         split.setDividerLocation(320);
         frame.add(split, BorderLayout.CENTER);
 
-        JPanel status = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel status = new JPanel(new BorderLayout(8, 8));
         balanceLabel = new JLabel("Balance: $0.00");
-        status.add(balanceLabel);
+        tipLabel = new JLabel();
+        tipLabel.setFont(tipLabel.getFont().deriveFont(Font.PLAIN, 12f));
+        tipLabel.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
+        status.add(balanceLabel, BorderLayout.WEST);
+        status.add(tipLabel, BorderLayout.CENTER);
         frame.add(status, BorderLayout.SOUTH);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        showRandomTip();
     }
 
     private JMenuBar createMenuBar() {
@@ -74,12 +80,15 @@ public class BudgetEaseGUI {
         reportBtn.addActionListener(e -> showReportDialog());
         JButton refreshBtn = new JButton("Refresh");
         refreshBtn.addActionListener(e -> refreshTable());
+        JButton tipBtn = new JButton("Tip");
+        tipBtn.addActionListener(e -> showRandomTipDialog());
 
         tb.add(addExpenseBtn);
         tb.add(addIncomeBtn);
         tb.add(reportBtn);
         tb.addSeparator();
         tb.add(refreshBtn);
+        tb.add(tipBtn);
         return tb;
     }
 
@@ -185,10 +194,25 @@ public class BudgetEaseGUI {
             tableModel.addRow(new Object[]{t.getId(), t.getType(), t.getDescription(), String.format("$%.2f", t.getAmount()), t.getDate(), t.getCategory().getDisplayName()});
         }
         updateBalance();
+        showRandomTip();
     }
 
     private void updateBalance() {
         balanceLabel.setText(String.format("Balance: $%.2f", manager.getBalance()));
+    }
+
+    private void showRandomTip() {
+        showTip(manager.getRandomBudgetTip());
+    }
+
+    private void showRandomTipDialog() {
+        String tip = manager.getRandomBudgetTip();
+        JOptionPane.showMessageDialog(frame, tip, "Budget Tip", JOptionPane.INFORMATION_MESSAGE);
+        showTip(tip);
+    }
+
+    private void showTip(String tip) {
+        tipLabel.setText(String.format("<html><b>Tip:</b> %s</html>", tip));
     }
 
     private TableCellRenderer createStripedRenderer() {

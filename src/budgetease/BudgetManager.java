@@ -48,6 +48,10 @@ public class BudgetManager {
         return reportGenerator.generateReport(this);
     }
 
+    public String getRandomBudgetTip() {
+        return BudgetAdviceProvider.getRandomTip();
+    }
+
     public double getBalance() { return balance; }
 
     public Transaction[] getTransactionsByCategory(Category category) {

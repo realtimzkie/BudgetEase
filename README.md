@@ -65,3 +65,22 @@ Commit changes (git commit -m "Add feature")
 Push to branch (git push origin feature-name)
 
 Open a Pull Request
+
+---
+
+## 💻 Running the GUI (Java Swing)
+
+You can run the provided Swing GUI which wraps the existing `BudgetManager` logic.
+
+From the project root (where `src` is located) compile and run with these commands:
+
+Windows (PowerShell or CMD):
+
+```powershell
+javac -d out src\budgetease\*.java
+java -cp out budgetease.BudgetEaseGUI
+```
+
+Notes:
+- Java 8 or newer is required.
+- If you prefer an IDE, import the project as a Java project and run the `main` method in `BudgetEaseGUI`.

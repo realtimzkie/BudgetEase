@@ -1,6 +1,5 @@
 package budgetease;
 
-import java.util.Map;
 
 public class DetailedReport {
     private final double totalIncome;
@@ -58,53 +57,57 @@ public class DetailedReport {
         return count;
     }
 
+    // Accessors for GUI/reporting
+    public double getTotalIncome() { return totalIncome; }
+    public double getTotalExpense() { return totalExpense; }
+    public double getBalance() { return balance; }
+    public double[] getCategoryTotals() { return categoryTotals.clone(); }
+    public int getTransactionCountValue() { return transactionCount; }
+    public double getAverageTransaction() { return averageTransaction; }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        
-        sb.append("╔══════════════════════════════════════════════════════╗\n");
-        sb.append("║                    BudgetEase Report                 ║\n");
-        sb.append("╠══════════════════════════════════════════════════════╣\n");
-        
-        String leftUpper = String.format("INCOME:    $%9.2f", totalIncome);
-        String rightUpper = String.format("EXPENSES: $%9.2f", totalExpense);
-        sb.append(String.format("║  %-25s   %-24s║\n", leftUpper, rightUpper));
-        
-        String leftLower = String.format("BALANCE:   $%9.2f", balance);
-        String rightLower = String.format("TRANSACTIONS: %3d", transactionCount);
-        sb.append(String.format("║  %-25s   %-24s║\n", leftLower, rightLower));
-        
-        sb.append("╠══════════════════════════════════════════════════════╣\n");
-        sb.append("║                       CATEGORIES                     ║\n");
-        
-        String breakdown = getCategoryBreakdown();
-        if (breakdown != null && !breakdown.isEmpty()) {
-            String[] lines = breakdown.split("\\r?\\n");
-            for (String line : lines) {
-                String trimmedLine = line.trim();
-                if (!trimmedLine.isEmpty()) {
-                    if (trimmedLine.contains("$")) {
-                        int dollarIdx = trimmedLine.indexOf("$");
-                        String catName = trimmedLine.substring(0, dollarIdx).trim();
-                        String amountStr = trimmedLine.substring(dollarIdx).trim();
-                        String formattedLine = String.format("%-39s %12s", catName, amountStr);
-                        sb.append(String.format("║  %-52s║\n", formattedLine));
-                    } else {
-                        sb.append(String.format("║  %-52s║\n", trimmedLine));
+
+        sb.append("BudgetEase Report\n");
+        sb.append("=================\n\n");
+
+        sb.append(String.format("Total Income : $%10.2f\n", totalIncome));
+        sb.append(String.format("Total Expense: $%10.2f\n", totalExpense));
+        sb.append(String.format("Balance      : $%10.2f\n", balance));
+        sb.append(String.format("Transactions : %d\n\n", transactionCount));
+
+        sb.append("Categories:\n");
+        double sum = 0;
+        for (double v : categoryTotals) sum += v;
+        if (sum <= 0) {
+            sb.append("  No transactions yet\n\n");
+        } else {
+            Category[] categories = Category.values();
+            Integer[] idx = new Integer[categories.length];
+            for (int i = 0; i < idx.length; i++) idx[i] = i;
+            // sort by totals desc
+            for (int i = 0; i < idx.length - 1; i++) {
+                for (int j = 0; j < idx.length - i - 1; j++) {
+                    if (categoryTotals[idx[j]] < categoryTotals[idx[j+1]]) {
+                        int t = idx[j]; idx[j] = idx[j+1]; idx[j+1] = t;
                     }
                 }
             }
+            for (int i : idx) {
+                double v = categoryTotals[i];
+                if (v <= 0) continue;
+                double pct = (sum > 0) ? (v / sum * 100.0) : 0.0;
+                sb.append(String.format("  %-15s $%10.2f   (%5.1f%%)\n", categories[i].getDisplayName(), v, pct));
+            }
+            sb.append('\n');
         }
-        
-        sb.append("╠══════════════════════════════════════════════════════╣\n");
-        sb.append("║                       ANALYTICS                      ║\n");
-        
-        String avgString = String.format("Average Transaction: $%9.2f", averageTransaction);
-        String catString = String.format("Categories Used: %2d", countUsedCategories());
-        sb.append(String.format("║  %-31s   %-18s║\n", avgString, catString));
-        
-        sb.append("╚══════════════════════════════════════════════════════╝\n");
-        
+
+        sb.append("Analytics:\n");
+        sb.append(String.format("  Average transaction : $%10.2f\n", averageTransaction));
+        sb.append(String.format("  Categories used      : %d\n", countUsedCategories()));
+        sb.append('\n');
+
         return sb.toString();
     }
 }

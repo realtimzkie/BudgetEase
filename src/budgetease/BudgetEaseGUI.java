@@ -1,17 +1,28 @@
 package budgetease;
 
+<<<<<<< HEAD
 import java.awt.*;
 import java.awt.event.ActionEvent;
+=======
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
+<<<<<<< HEAD
+=======
+import java.awt.*;
+import java.awt.event.ActionEvent;
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
 
 public class BudgetEaseGUI {
     private final BudgetManager manager;
     private JFrame frame;
     private JLabel balanceLabel;
+<<<<<<< HEAD
     private JLabel tipLabel;
+=======
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
     private DefaultTableModel tableModel;
     private JTable transactionsTable;
 
@@ -35,6 +46,7 @@ public class BudgetEaseGUI {
         split.setDividerLocation(320);
         frame.add(split, BorderLayout.CENTER);
 
+<<<<<<< HEAD
         JPanel status = new JPanel(new BorderLayout(8, 8));
         balanceLabel = new JLabel("Balance: $0.00");
         tipLabel = new JLabel();
@@ -42,11 +54,19 @@ public class BudgetEaseGUI {
         tipLabel.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
         status.add(balanceLabel, BorderLayout.WEST);
         status.add(tipLabel, BorderLayout.CENTER);
+=======
+        JPanel status = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        balanceLabel = new JLabel("Balance: $0.00");
+        status.add(balanceLabel);
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
         frame.add(status, BorderLayout.SOUTH);
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+<<<<<<< HEAD
         showRandomTip();
+=======
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
     }
 
     private JMenuBar createMenuBar() {
@@ -80,15 +100,21 @@ public class BudgetEaseGUI {
         reportBtn.addActionListener(e -> showReportDialog());
         JButton refreshBtn = new JButton("Refresh");
         refreshBtn.addActionListener(e -> refreshTable());
+<<<<<<< HEAD
         JButton tipBtn = new JButton("Tip");
         tipBtn.addActionListener(e -> showRandomTipDialog());
+=======
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
 
         tb.add(addExpenseBtn);
         tb.add(addIncomeBtn);
         tb.add(reportBtn);
         tb.addSeparator();
         tb.add(refreshBtn);
+<<<<<<< HEAD
         tb.add(tipBtn);
+=======
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
         return tb;
     }
 
@@ -194,13 +220,17 @@ public class BudgetEaseGUI {
             tableModel.addRow(new Object[]{t.getId(), t.getType(), t.getDescription(), String.format("$%.2f", t.getAmount()), t.getDate(), t.getCategory().getDisplayName()});
         }
         updateBalance();
+<<<<<<< HEAD
         showRandomTip();
+=======
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
     }
 
     private void updateBalance() {
         balanceLabel.setText(String.format("Balance: $%.2f", manager.getBalance()));
     }
 
+<<<<<<< HEAD
     private void showRandomTip() {
         showTip(manager.getRandomBudgetTip());
     }
@@ -215,6 +245,8 @@ public class BudgetEaseGUI {
         tipLabel.setText(String.format("<html><b>Tip:</b> %s</html>", tip));
     }
 
+=======
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
     private TableCellRenderer createStripedRenderer() {
         return new DefaultTableCellRenderer() {
             @Override

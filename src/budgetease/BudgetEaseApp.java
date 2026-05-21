@@ -43,8 +43,12 @@ public class BudgetEaseApp {
                 │ 4.   Generate Report                │
                 │ 5.   Transactions by Category       │
                 │ 6.   All Transactions               │
+<<<<<<< HEAD
                 │ 7.   Get Budget Tip                 │
                 │ 8.   Exit                           │
+=======
+                │ 7.   Exit                           │
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
                 └─────────────────────────────────────┘
                 %s
                 """, capacityInfo));
@@ -58,8 +62,12 @@ public class BudgetEaseApp {
             case 4 -> System.out.println("\n" + manager.generateReport());
             case 5 -> showTransactionsByCategory();
             case 6 -> showAllTransactions();
+<<<<<<< HEAD
             case 7 -> System.out.println("💡 " + manager.getRandomBudgetTip());
             case 8 -> {
+=======
+            case 7 -> {
+>>>>>>> 3c933d9d1f28a1ba9c935108126be1f91dd2cabf
                 System.out.println(" Thank you for using BudgetEase!");
                 System.exit(0);
             }
